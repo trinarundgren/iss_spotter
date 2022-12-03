@@ -1,3 +1,5 @@
+'use strict;';
+
 // index.js
 const { fetchMyIP } = require('./iss');
 const { fetchCoordsByIP } = require('./iss');
@@ -9,6 +11,9 @@ fetchCoordsByIP('205.250.55.49', (error, data) => {
   }
   console.log("It worked! Returned IP:" , data);
 });
+
+
+
 
 // fetchMyIP((error, ip) => {
 //   if (error) {

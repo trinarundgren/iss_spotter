@@ -1,4 +1,7 @@
+'use strict;';  
+
 const request = require('request');
+const { parse } = require('request/lib/cookies');
 /**
  * Makes a single API request to retrieve the user's IP address.
  * Input:
@@ -22,8 +25,25 @@ const fetchMyIP = function(callback) {
 };
 
 const fetchCoordsByIP = (ip, callback) => {
-  
-}
+  request(`http://ipwho.is/${ip}`,  (error, resp, body) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+
+    const parsedBody = JSON.parse(body);
+
+    if (!parsedBody.success) {
+      const message = `Success status was ${parsedBody.success}. Server message says: ${parsedBody.message} when fetching for IP ${parsedBody.ip}`;
+      callback(Error(message), null);
+      return;
+    }
+
+    const { latitude, longitude } = parsedBody;
+
+    callback(null, { latitude, longitude });
+  });
+};
 
 
 module.exports = { fetchMyIP, fetchCoordsByIP };
